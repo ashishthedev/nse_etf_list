@@ -42,12 +42,12 @@ def main():
     # print(data.iloc[i]['SYMBOL'], data.iloc[i]['UNDERLYING ASSET'], sep='\t')
     # Print symbol and underlying asset so that
     # it can be copied to the excel sheet
-    # Save it in a csv file
     DEST_DIR = "outputs"
     # Ensure the directory exists
     import os
 
     os.makedirs(DEST_DIR, exist_ok=True)
+    # Save it in a csv file
     with open("outputs/new_etf.csv", "w") as f:
         for index, row in data.iterrows():
             f.write(row["SYMBOL"] + "," + row["UNDERLYING ASSET"] + "\n")
