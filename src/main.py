@@ -3,6 +3,7 @@ import pandas as pd
 from io import StringIO
 
 # ETF_DOWNLOAD_LINK = "https://www.nseindia.com/api/etf?csv=true&selectValFormat=crores"
+# ETF_DOWNLOAD_LINK_PAGE = "https://www.nseindia.com/market-data/exchange-traded-funds-etf""
 
 ETF_DOWNLOADED_FILE_PATH = "downloads/etf.csv"
 
@@ -29,6 +30,9 @@ def remove_rows_with_volume_less_than_minimum(minimum, data):
 def main():
     data = read_etf_data(file_path=ETF_DOWNLOADED_FILE_PATH)
     data = remove_rows_with_volume_less_than_minimum(minimum=10000, data=data)
+    print("_" * 100)
+    print("Removed symbols with volume less than 10000")
+    print("_" * 100)
     # Sort the data by Symbol
     data = data.sort_values(by="SYMBOL")
     # Convert symbol to uppercase and remove any leading or trailing spaces and prepend "NSE:" to the symbol
@@ -38,8 +42,22 @@ def main():
     # print(data.iloc[i]['SYMBOL'], data.iloc[i]['UNDERLYING ASSET'], sep='\t')
     # Print symbol and underlying asset so that
     # it can be copied to the excel sheet
+    # Save it in a csv file
+    DEST_DIR = "outputs"
+    # Ensure the directory exists
+    import os
+
+    os.makedirs(DEST_DIR, exist_ok=True)
+    with open("outputs/new_etf.csv", "w") as f:
+        for index, row in data.iterrows():
+            f.write(row["SYMBOL"] + "," + row["UNDERLYING ASSET"] + "\n")
     for index, row in data.iterrows():
         print(row["SYMBOL"], row["UNDERLYING ASSET"], sep="|")
+    print("_" * 100)
+    print(
+        f"Count of symbols were 154 as on 7Aug24. Today it is: {len(data)}. To refresh, download the latest file from NSE(https://www.nseindia.com/market-data/exchange-traded-funds-etf) and run the script again. Paste the output in some excel sheet Split the data in excel sheet using delimiter as `|`"
+    )
+    print("_" * 100)
 
 
 if __name__ == "__main__":
